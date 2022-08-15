@@ -1,6 +1,7 @@
 using EjemploMVC.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using AdventureWorksNS.Data;
 
 namespace EjemploMVC
 {
@@ -22,6 +23,15 @@ namespace EjemploMVC
 
             builder.Services.AddControllersWithViews();
 
+            //agregar el servicio de AventureWorksLT
+
+            string sqlServerConnection = builder.Configuration.GetConnectionString("AdventureWorksConnection");
+            builder.Services.AdventureWorksDBContext(sqlServerConnection);
+
+
+            // antes de esta linea agregar todos los servicios
+           
+            
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
