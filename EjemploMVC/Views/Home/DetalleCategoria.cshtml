@@ -1,0 +1,22 @@
+﻿@model AdventureWorksNS.Data.ProductModel
+
+
+@{
+    ViewData["Title"] = "Detalle de Categoria - " + @Model.Name;
+}
+<h2>Detalle de Categoria</h2>
+<hr/>
+<div>
+    <dl class="dl-horizontal">
+        <dt>ID del Categoria</dt>
+        <dd>@Model.ProductModelId</dd>
+        <dt>Detalle de la categoria</dt>
+        <dd>@Model.Name</dd>
+      <dt>Rowguid</dt>
+        <dd>@Model.Rowguid</dd>
+        <dt>Fecha de Modificacion</dt>
+        <dd>@Model.ModifiedDate</dd>
+
+
+    </dl>
+</div>

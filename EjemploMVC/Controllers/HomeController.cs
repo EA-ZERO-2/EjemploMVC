@@ -7,7 +7,7 @@ using AdventureWorksNS.Data;
 namespace EjemploMVC.Controllers
 {
     public class HomeController : Controller
-       
+
     {
         private readonly ILogger<HomeController> _logger;
         private readonly AdventureWorksDB db;
@@ -18,7 +18,7 @@ namespace EjemploMVC.Controllers
             db = injectedContext;
         }
 
-        [ResponseCache(Duration = 10,Location = ResponseCacheLocation.Any)]
+        [ResponseCache(Duration = 10, Location = ResponseCacheLocation.Any)]
         public IActionResult Index()
 
         {
@@ -26,6 +26,7 @@ namespace EjemploMVC.Controllers
             model.ContadorVisitas = (new Random()).Next(1, 1001);
             model.Products = db.Products.ToList();
             model.Categorias = db.ProductCategories.ToList();
+            model.productModels = db.ProductModels.ToList();
 
             return View(model);
         }
@@ -42,5 +43,53 @@ namespace EjemploMVC.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+
+        public IActionResult DetalleProducto(int? id)
+        {
+            if (!id.HasValue)
+            {
+                return BadRequest("Se debe colocar un ID del producto en la ruta, por ejemplo /Home/");
+            }
+            Product? model = db.Products.SingleOrDefault(p => p.ProductId == id);
+            if (model == null)
+            {
+                return NotFound($"El producto con el id {id} no se pudo encontrar");
+            }
+            return View(model);
+        }
+
+        public IActionResult ProductosConPrecioMayorA(decimal? precio)
+        {
+            if (!precio.HasValue)
+            {
+                return BadRequest("Se debe colocar un precio en la ruta, por ejemplo /home/ProductosConPrecioMayorA/500");
+            }
+            IEnumerable<Product> model = db.Products
+                    .Where(p => p.ListPrice >= precio);
+            if (!model.Any())
+            {
+                return NotFound($"No hay productos que cuesten mas que {precio:C}");
+            }
+            ViewData["PrecioMaximo"] = precio.Value.ToString("C");
+            return View(model);
+        }
+
+        public IActionResult DetalleCategoria(int? id)
+        {
+            if (!id.HasValue)
+            {
+                return BadRequest("Se debe colocar un ID del producto en la ruta, por ejemplo /Home/");
+            }
+            ProductModel? model = db.ProductModels.SingleOrDefault(d => d.ProductModelId == id);
+            if (model == null)
+            {
+                return NotFound($"El producto con el id {id} no se pudo encontrar");
+            }
+            return View(model);
+        }
+
     }
 }
+
+
+
