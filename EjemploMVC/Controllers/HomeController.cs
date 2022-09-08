@@ -11,12 +11,18 @@ namespace EjemploMVC.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly AdventureWorksDB db;
+        private readonly IHttpClientFactory _httpClientFactory;
 
-        public HomeController(ILogger<HomeController> logger, AdventureWorksDB injectedContext)
+        public HomeController(ILogger<HomeController> logger, 
+            AdventureWorksDB injectedContext,
+            IHttpClientFactory httpClientFactory)
         {
             _logger = logger;
             db = injectedContext;
+            _httpClientFactory = httpClientFactory;
         }
+
+
 
         [ResponseCache(Duration = 10, Location = ResponseCacheLocation.Any)]
         public IActionResult Index()
@@ -85,6 +91,28 @@ namespace EjemploMVC.Controllers
             {
                 return NotFound($"El producto con el id {id} no se pudo encontrar");
             }
+            return View(model);
+        }
+
+
+        public async Task<IActionResult>Customers(String companyName)
+        {
+            string uri;
+            if (string.IsNullOrEmpty(companyName))
+            {
+                ViewData["Title"] = "Todos los Customers";
+                uri = "api/Customer/";
+            }
+            else
+            {
+                ViewData["Title"] = $"Clientes de {companyName}";
+                uri = $"api/Customer/?companyName{companyName}";
+            }
+
+            HttpClient client = _httpClientFactory.CreateClient(name: "AdventureWorksAPI");
+            HttpRequestMessage request = new HttpRequestMessage(method: HttpMethod.Get, requestUri: uri );
+            HttpResponseMessage response = await client.SendAsync(request);
+            IEnumerable<Customer>? model = await response.Content.ReadFromJsonAsync<IEnumerable<Customer>>();
             return View(model);
         }
 

@@ -12,6 +12,15 @@
 </div>
 <p class="alert alert-primary">@DateTime.Now.ToLongTimeString()</p>
 
+
+<h1>Consulta de Customer</h1>
+<form asp-action="Customers" method="get">
+    <input name="companyName" placeholder="Ingrese la compañía" />
+    <input type="submit" />
+
+    </Form>
+
+
 @if (Model.Categorias is not null)
 {
     <div id="categories" class="carousel slide" data-ride="carousel"

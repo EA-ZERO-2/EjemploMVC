@@ -2,6 +2,7 @@ using EjemploMVC.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using AdventureWorksNS.Data;
+using System.Net.Http.Headers;
 
 namespace EjemploMVC
 {
@@ -13,6 +14,22 @@ namespace EjemploMVC
 
             // Add services to the container.
             var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+           
+            
+            
+            
+            builder.Services.AddHttpClient(name: "AdventureWorksAPI",
+                configureClient: Options =>
+                {
+                    Options.BaseAddress = new Uri("https://localhost:7176/");
+                    Options.DefaultRequestHeaders.Accept.Add(
+                        new MediaTypeWithQualityHeaderValue("application/json" ,1.0));
+                });          
+            
+
+
+
+
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(connectionString));
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();

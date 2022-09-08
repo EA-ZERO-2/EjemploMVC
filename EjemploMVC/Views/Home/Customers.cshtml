@@ -1,0 +1,37 @@
+﻿@using AdventureWorksNS.Data
+@model IEnumerable<Customer>
+
+<h2>@ViewData["Title"]</h2>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Nombre Compañia</th>
+            <th>Nombre Contacto</th>
+            <th>E-Mail</th>
+            <th>Telefono</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model is not null)
+        {
+            @foreach (Customer c in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => c.CompanyName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => c.FirstName) @Html.DisplayFor(modelItem => c.LastName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => c.EmailAddress)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => c.Phone)
+                    </td>
+                </tr>
+            }
+        }
+
+    </tbody>
+</table>
